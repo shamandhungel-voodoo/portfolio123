@@ -1,13 +1,15 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+// Base URL from environment variable
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
+// Create axios instance
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 10000, // Add timeout
+  timeout: 10000, // 10 seconds timeout
 });
 
 // Request interceptor to add auth token
@@ -17,8 +19,8 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    
-    // Debug log
+
+    // Debug log for requests
     console.log('🌐 API Request:', config.method?.toUpperCase(), config.url, config.data ? 'with data' : '');
     return config;
   },
@@ -38,10 +40,11 @@ api.interceptors.response.use(
     console.error('❌ API Response Error:', {
       url: error.config?.url,
       status: error.response?.status,
-      message: error.response?.data?.message || error.message
+      message: error.response?.data?.message || error.message,
     });
-    
+
     if (error.response?.status === 401) {
+      // Clear token and redirect to login
       localStorage.removeItem('adminToken');
       localStorage.removeItem('adminData');
       if (!window.location.pathname.includes('/admin/login')) {
@@ -55,7 +58,7 @@ api.interceptors.response.use(
 // Test backend connection
 export const testConnection = () => api.get('/api/health');
 
-// Auth API - FIXED: Added /api prefix
+// Auth API
 export const authAPI = {
   login: (email, password) => api.post('/api/admin/login', { email, password }),
   getProfile: () => api.get('/api/admin/profile'),
@@ -66,7 +69,7 @@ export const authAPI = {
   },
 };
 
-// Projects API - FIXED: Added /api prefix
+// Projects API
 export const projectsAPI = {
   getAll: () => api.get('/api/projects'),
   getById: (id) => api.get(`/api/projects/${id}`),
@@ -75,7 +78,7 @@ export const projectsAPI = {
   delete: (id) => api.delete(`/api/projects/${id}`),
 };
 
-// Testimonials API - FIXED: Added /api prefix
+// Testimonials API
 export const testimonialsAPI = {
   getAll: () => api.get('/api/testimonials'),
   create: (testimonial) => api.post('/api/testimonials', testimonial),
@@ -83,13 +86,13 @@ export const testimonialsAPI = {
   delete: (id) => api.delete(`/api/testimonials/${id}`),
 };
 
-// Contact API - FIXED: Added /api prefix and missing function
+// Contact API
 export const contactAPI = {
   sendMessage: (message) => api.post('/api/contact', message),
-  getContactMessages: () => api.get('/api/contact/messages'), // Added this
+  getContactMessages: () => api.get('/api/contact/messages'),
 };
 
-// Chatbot API - FIXED: Added /api prefix
+// Chatbot API
 export const chatbotAPI = {
   sendMessage: (message) => api.post('/api/chatbot', { message }),
 };
