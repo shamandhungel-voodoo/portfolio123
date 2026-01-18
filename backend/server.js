@@ -74,6 +74,7 @@ const allowedOrigins = [
   'https://localhost:5173',
   'http://localhost:3000',
   'https://localhost:3000',
+  'https://portfoliobackendlive.vercel.app', // ← ADDED: Your Vercel frontend URL
   process.env.FRONTEND_URL
 ].filter(Boolean); // Remove any undefined values
 
