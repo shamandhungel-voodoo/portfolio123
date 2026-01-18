@@ -1,22 +1,3 @@
-# Node modules
-node_modules/
-
-# Vite build output
-dist/
-
-# Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# System files
-.DS_Store
-Thumbs.db
-
-# Optional editor folders
-.vscode/
-.idea/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
+node_modules
+dist
+.env
